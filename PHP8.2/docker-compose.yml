@@ -1,0 +1,24 @@
+# You need to use the latest version of docker-compose yml
+version: '3.5'
+# To use the new configuration from Dockerfile you need to use
+# docker compose up --build
+services:
+  web:
+    build: './'
+    volumes:
+      - ./html/:/var/www/html
+      - ./log/php:/var/log/php-fpm
+      - ./log/apache:/var/log/apache2
+    ports:
+      # host:container
+      - 8000:80
+    external_links:
+            - elasticsearch7
+    network_mode: bridge
+    container_name: php82mine
+
+#networks:
+#  #my-network-name:
+#  default:
+#    name: magenet
+#    external: true

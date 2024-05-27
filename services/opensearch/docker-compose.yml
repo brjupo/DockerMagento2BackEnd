@@ -1,0 +1,86 @@
+## Tested opensearch v2.5.0, opensearch-project/opensearch-php [PHP client] v2.0.0, Magento EE v2.4.6
+version: '3'
+services:
+  opensearch:
+    container_name: opensearch  
+    build: './'
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch
+      - discovery.seed_hosts=opensearch
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      ## Avoid test failures due to small disks
+      ## More info at https://github.com/markshust/docker-magento/issues/488
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - index.blocks.read_only_allow_delete
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    ports:
+    # host:container
+      - 10200:9200  # assigned to port 10200 in case you have elasticsearch at port 9200
+      - 9600:9600
+    network_mode: bridge
+    restart: always
+
+volumes:
+  opensearch-data:
+
+## app/etc/env.php configuration
+# In opensearch_server_hostname configuration you MUST use gateway IP of Docker
+# opensearch_index_prefix configuration is OPTIONAL
+
+# 'system' => [
+#         'default' => [
+#             'catalog' => [
+#                 'search' => [
+#                     'engine' => 'opensearch',
+#                     'opensearch_server_hostname' => '172.17.0.1',
+#                     'opensearch_server_port' => 10200,
+#                     'opensearch_index_prefix' => 'op_store'
+#                 ]
+#             ]
+#         ]
+#     ]
+
+
+## References
+
+# Googling the error 
+# magento 2 could not validate a connection to the opensearch 
+
+# Remove security folder and comment security configuration in opensearch YML 
+# https://magento.stackexchange.com/questions/366082/magento-2-4-6-could-not-validate-a-connection-to-the-opensearch-no-alive-node 
+
+# Remove security plugin in Docker 
+# https://opensearch.org/docs/2.11/install-and-configure/install-opensearch/docker/#working-with-plugins 
+
+# OpenSearch. No alive nodes found in your cluster 
+# https://community.magento.com/t5/Magento-2-x-Technical-Issues/Opensearch-No-Alive-node-found-in-your-cluster/td-p/511512 
+# https://github.com/magento/magento2/issues/37490 
+
+# Turn off opensearch SSL 
+# https://forum.opensearch.org/t/how-to-disable-ssl-locally/6656 
+
+# Disable security plugin 
+# https://opensearch.org/docs/2.11/security/configuration/disable/ 
+
+# Install and configure docker 
+# https://opensearch.org/docs/2.11/install-and-configure/install-opensearch/docker/ 
+
+# Linux check ports 
+# https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/ 
+
+# Docker opensearch mark shust 
+# https://github.com/markshust/docker-magento/blob/master/compose/compose.yaml  
+
+# Magento 2 configure opensearch 
+# https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/search/configure-search-engine.html?lang=en 

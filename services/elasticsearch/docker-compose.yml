@@ -1,0 +1,27 @@
+version: '3.5'
+services:
+  elasticsearch7:
+    image: elasticsearch:7.17.0
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+      - ./logs:/var/log/elasticsearch/
+      - ./mnt:/mnt/docker
+    ports:
+      - 9200:9200
+    network_mode: bridge
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ES_HEAP_SIZE="1g"
+    ulimits:
+      memlock:
+        soft: 65535
+        hard: 65535
+    container_name: elasticsearch7
+    entrypoint: /mnt/docker/docker-entrypoint.sh
+    #restart: always
+
+#networks:
+#  default:
+#    name: magenet
+#    external: true
