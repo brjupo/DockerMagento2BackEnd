@@ -1,3 +1,10 @@
+Visual Studio Code Default Markdown Preview Shortcut 
+```
+CTRL+K V
+```
+<br>
+<br>
+
 # Install PWA Venia
 
 ```text
