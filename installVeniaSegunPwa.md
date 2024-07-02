@@ -82,16 +82,29 @@ https://www.braintreepayments.com/sandbox
 Adicional en el archivo:
 - packages/venia-concept/.env
 
-Deberas cambiar tu CHECKOUT_BRAINTREE_TOKEN, el cual se forma por 3 conceptos clave:
-- La palabra "sandbox"
-- El Merchant ID
-- La public Key
+Actualiza tu BRAINTREE TOKEN, para ello ingresa a tu cuenta de sandbox de BRAINTREE
 
-Por ejemplo, tomemos el token que trae la instalación de PWA
-sandbox_8yrzsvtm_s2bg8fs563crhqzk
-En la cuenta sandbox de esta persona, le apareció algo como:
-- Merchant ID: 8yrzsvtm
-- Public Key: s2bg8fs563crhqzk
+https://sandbox.braintreegateway.com/
+Gear > API > Tokenization Keys.
+Genera una new Tokenization Key y usala como CHECKOUT_BRAINTREE_TOKEN
+CHECKOUT_BRAINTREE_TOKEN=sandbox_abc123def456_098765qwerty
+
+Deten el PWA
+Has de nuevo un yarn install y un yarn watch:venia
+
+For test cards use:
+https://support.checkfront.com/hc/en-us/articles/115004847353-Setting-up-Braintree-Direct-as-your-Checkfront-payment-provider
+```text
+Visa: 4111 1111 1111 1111
+Mastercard: 5555 5555 5555 4444
+Amex: 3714 496353 9843
+You can use any CVC code.
+
+Use a valid month and a day within the next 180 years for expiry dates.
+
+Amounts between $0.01 - $1999.99 simulate a successful authorization.
+```
+
 
 ## A mi NO me funcionó el CheckMoneyOrder
 https://github.com/magento/pwa-studio/tree/develop/packages/extensions/venia-sample-payments-checkmo
