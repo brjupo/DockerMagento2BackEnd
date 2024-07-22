@@ -86,7 +86,21 @@ VERSION 16
 ### Install this every time you create a new PWA-Studio
 
 In the target folder, download your pwa-studio project version 13.0.0 (for Adobe Commerce 2.4.6)
+
 https://github.com/magento/pwa-studio
+
+Checkout to version v13.0.0
+
+```bash
+git fetch origin v13.0.0:v13.0.0
+git checkout v13.0.0
+```
+
+To install all files needed, run:
+
+```bash
+yarn install
+```
 
 In packages/venia-concept/.env file, change the value:
 - MAGENTO_BACKEND_URL
