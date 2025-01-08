@@ -4,6 +4,7 @@ version: '3.5'
 # docker compose up --build
 services:
   web:
+    # REMEMBER! Edit your xdebug.client_host on your conf/php.ini file
     build: './'
     volumes:
       - ./html/:/var/www/html

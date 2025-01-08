@@ -4,8 +4,11 @@ services:
   opensearch:
     container_name: opensearch  
     build: './'
+    # REMEMBER to change permissions to preserve data in hard disk and avoid problems when REINDEX
     volumes:
-      - opensearch-data:/usr/share/opensearch/data
+      - ./opensearch-data:/usr/share/opensearch/data
+      - ./services_logs/opensearch:/var/log/opensearch/
+      - ./services_logs/opensearch:/usr/share/opensearch/logs/
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch
