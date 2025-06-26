@@ -1,6 +1,15 @@
 # https://medium.com/swlh/alpine-slim-stretch-buster-jessie-bullseye-bookworm-what-are-the-differences-in-docker-62171ed4531d
 FROM php:8.2-fpm-buster
 MAINTAINER "brjupo"
+# ------------------------- TO DO -------------------------
+# Intall systemctl
+# Variable for xdebug IP
+# Improve php-fpm https://www.php.net/manual/en/install.fpm.configuration.php
+# ---------- Session Lifetime ---------
+# In php.ini file, change the following:
+#
+# session.cookie_lifetime 31536000
+# session.gc_maxlifetime 31536000
 
 # ------------------------- BASIC ONES -------------------------
 # https://manpages.debian.org/stretch/apt/apt-get.8.en.html

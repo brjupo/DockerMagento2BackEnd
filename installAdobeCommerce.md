@@ -66,6 +66,37 @@ CREATE DATABASE php74mine;
 ```
 
 ## Install the application
+
+In case de "Installation Command" show the following issue:
+
+### Opensearch - Magento 2.4.7+ Issue 
+
+> Opensearch no alive nodes found
+
+
+> Cannot found host opensearch
+
+You will need to add the opensearch configuration to app/etc/env.php
+
+````php
+,
+    'system' => [
+        'default' => [
+            'catalog' => [
+                'search' => [
+                    'engine' => 'opensearch',
+                    'opensearch_server_hostname' => '172.17.0.2',   // Could be docker gateway IP
+                    'opensearch_server_port' => 10200,              // Port assigned to opensearch
+                    'opensearch_index_prefix' => 'op_project_'      // Recommended prefix
+                ]
+            ]
+        ]
+    ]
+````
+
+Then you can try the Installation Command without search engine configurations
+
+### Installation Command
 ```
 bin/magento setup:install \
 --base-url=http://php74mine.local \
