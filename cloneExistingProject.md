@@ -115,13 +115,13 @@ Para el archivo de env.php, edita las variables de:
     'db' => [
         'connection' => [
             'default' => [
-                'host' => 'mariadb',
+                'host' => '172.17.0.1',
                 'username' => 'root',
                 'dbname' => 'nombredb',
                 'password' => 'mysql'
             ],
             'indexer' => [
-                'host' => 'mariadb',
+                'host' => '172.17.0.1',
                 'username' => 'root',
                 'dbname' => 'nombredb',
                 'password' => 'mysql'
@@ -134,8 +134,48 @@ Para el archivo de env.php, edita las variables de:
 #### ElasticSearch / OpenSearch <a id="elastic_open_search"></a>
 [Regresar a la tabla de contenido](#tableOfContents)
 
+
+##### Magento < 2.4.8
+
 *  ***'elasticsearch7_server_hostname' => 'elastic'*** verifica que se llame igual que el contenedor de elasticsearch que tienes en tu local.
 
+````php
+'system' => [
+      'default' => [
+          'catalog' => [
+              'search' => [
+                    'engine' => 'elasticsearch7',
+                    'elasticsearch7_server_hostname' => 'elastic',
+                    'elasticsearch7_server_port' => 9200
+              ]
+          ]
+      ]
+  ]
+````
+
+##### Magento >= 2.4.8
+
+*  ***'opensearch_server_hostname' => '172.17.0.2'*** verifica que sea la IP del docker o del docker gateway, lo puedes hacer con:
+> docker inspect opensearch
+
+
+````php
+'system' => [
+      'default' => [
+          'catalog' => [
+              'search' => [
+                  'engine' => 'opensearch',
+                  'opensearch_server_hostname' => '172.17.0.2',
+                  'opensearch_server_port' => 10200,
+                  'opensearch_index_prefix' => 'el_vde_op_'
+              ]
+          ]
+      ]
+  ]
+````
+
+
+#### Tu archivo env.php deberá quedar como el siguiente:
 
 ```php
 
@@ -214,15 +254,16 @@ return [
         'dominio.dev'
     ],
     'install' => [
-        'date' => 'Tue, 04 Aug 2020 05:54:37 +0000'
+        'date' => 'Thu, 26 Jun 2025 05:54:37 +0000'
     ],
     'system' => [
         'default' => [
             'catalog' => [
                 'search' => [
-                    'engine' => 'elasticsearch7',
-                    'elasticsearch7_server_hostname' => 'elastic',
-                    'elasticsearch7_server_port' => 9200
+                    'engine' => 'opensearch',
+                    'opensearch_server_hostname' => '172.17.0.2',
+                    'opensearch_server_port' => 10200,
+                    'opensearch_index_prefix' => 'el_vde_op_'
                 ]
             ]
         ]

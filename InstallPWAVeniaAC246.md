@@ -1,7 +1,9 @@
 Visual Studio Code Default Markdown Preview Shortcut
+
 ```
 CTRL+K V
 ```
+
 <br>
 <br>
 
@@ -22,13 +24,11 @@ https://developer.adobe.com/commerce/pwa-studio/guides/
 
 https://developer.adobe.com/commerce/pwa-studio/tutorials/setup-storefront/
 
-
 ## Install backend modules
 
 You need to have a working installation of Vanilla Adobe Commerce version 2.4.6
 
 https://developer.adobe.com/commerce/pwa-studio/metapackages/open-source/
-
 
 ```bash
 # To much reading to only need to run the following line an upload composer.json changes XD
@@ -43,13 +43,11 @@ php bin/magento setup:upgrade
 php bin/magento indexer:reindex
 ```
 
-
 # Magento GitHub
 
 In this tutorial, the used version for Adobe Commerce 2.4.6 is pwa-studio v13.0.0
 
 https://github.com/magento/pwa-studio/tree/v13.0.0
-
 
 ## Install PWA Dependencies
 
@@ -81,8 +79,6 @@ https://computingforgeeks.com/how-to-install-nodejs-on-ubuntu-debian-linux-mint/
 VERSION 16
 ```
 
-
-
 ### Install this every time you create a new PWA-Studio
 
 In the target folder, download your pwa-studio project version 13.0.0 (for Adobe Commerce 2.4.6)
@@ -103,11 +99,13 @@ yarn install
 ```
 
 In packages/venia-concept/.env file, change the value:
+
 - MAGENTO_BACKEND_URL
-For example:
+  For example:
 - MAGENTO_BACKEND_URL=https://mag246.local/
 
 Now execute the commands:
+
 ```bash
 yarn install
 
@@ -117,7 +115,32 @@ yarn watch:venia
 # https://developer.adobe.com/commerce/pwa-studio/tutorials/setup-storefront/#add-a-custom-hostname-and-ssl-cert
 ```
 
-### Braintree's configuration for a complete test
+---
+
+
+## Configuration to change PWA URL
+
+Thanks to: https://magento.stackexchange.com/a/287281/93150
+
+1. Stop yarn with "Ctrl+C"
+2. Check the environment file nano packages/venia-concept/.env
+3. Change MAGENTO_BACKEND_URL=http://mag246.local/
+4. Change CUSTOM_ORIGIN_EXACT_DOMAIN=mag246.pwa
+5. Your 10000 port should open (very important), you need to add it in .env file DEV_SERVER_PORT=10000, save the .env
+   file.
+6. Run this command to generate ssl cert for venia package
+> yarn buildpack create-custom-origin packages/venia-concept
+
+7. And finally
+> yarn run watch:venia
+
+8. You can see your PWA at **http://mag246.pwa**
+
+
+---
+
+
+## Braintree's configuration for a complete test
 
 For a complete test you can configure Braintree
 
@@ -134,6 +157,7 @@ https://sandbox.braintreegateway.com/
 ---
 
 For Magento Admin, you will need:
+
 - Merchant ID
 - Public Key
 - Private Key
@@ -144,12 +168,14 @@ Gear > API > API Keys > Private Key > View
 ---
 
 For PWA installation, you will need:
+
 - CHECKOUT_BRAINTREE_TOKEN
 
-You can get this information from your sandbox braintree account 
+You can get this information from your sandbox braintree account
 Gear > API > Tokenization Keys > Generate New Tokenization Key
 
 In packages/venia-concept/.env file, change the value:
+
 - CHECKOUT_BRAINTREE_TOKEN
 
 For example:
@@ -158,6 +184,7 @@ CHECKOUT_BRAINTREE_TOKEN=sandbox_abc123def456_098765qwerty
 ---
 
 Stop PWA using CTRL + C and run:
+
 ```bash
 yarn install
 
@@ -165,10 +192,10 @@ yarn install
 yarn watch:venia
 ```
 
-
 For test cards use:
 
 https://support.checkfront.com/hc/en-us/articles/115004847353-Setting-up-Braintree-Direct-as-your-Checkfront-payment-provider
+
 ```text
 Visa: 4111 1111 1111 1111
 Mastercard: 5555 5555 5555 4444

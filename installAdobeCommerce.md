@@ -67,37 +67,11 @@ CREATE DATABASE php74mine;
 
 ## Install the application
 
-In case de "Installation Command" show the following issue:
+### For Magento < 2.4.7
 
-### Opensearch - Magento 2.4.7+ Issue 
+Run install command
 
-> Opensearch no alive nodes found
-
-
-> Cannot found host opensearch
-
-You will need to add the opensearch configuration to app/etc/env.php
-
-````php
-,
-    'system' => [
-        'default' => [
-            'catalog' => [
-                'search' => [
-                    'engine' => 'opensearch',
-                    'opensearch_server_hostname' => '172.17.0.2',   // Could be docker gateway IP
-                    'opensearch_server_port' => 10200,              // Port assigned to opensearch
-                    'opensearch_index_prefix' => 'op_project_'      // Recommended prefix
-                ]
-            ]
-        ]
-    ]
-````
-
-Then you can try the Installation Command without search engine configurations
-
-### Installation Command
-```
+```bash
 bin/magento setup:install \
 --base-url=http://php74mine.local \
 --db-host=172.17.0.1 \
@@ -120,6 +94,48 @@ bin/magento setup:install \
 --elasticsearch-timeout=15
 ```
 
+### For Magento >= 2.4.7
+
+Add this configuration to app/etc/env.php
+
+````php
+<?php
+return [
+    'system' => [
+        'default' => [
+            'catalog' => [
+                'search' => [
+                    'engine' => 'opensearch',
+                    'opensearch_server_hostname' => '172.17.0.2',   // Could be docker gateway IP
+                    'opensearch_server_port' => 10200,              // Port assigned to opensearch
+                    'opensearch_index_prefix' => 'op_project_'      // Recommended prefix
+                ]
+            ]
+        ]
+    ]
+];
+````
+
+Run install command
+
+```
+bin/magento setup:install \
+--base-url=http://php74mine.local \
+--db-host=172.17.0.1 \
+--db-name=php74mine \
+--db-user=root \
+--db-password=mysql \
+--admin-firstname=UserFirstName \
+--admin-lastname=UserLastName \
+--admin-email=my@mail.com \
+--admin-user=adminUser \
+--admin-password=Admi123q \
+--language=es_MX \
+--currency=MXN \
+--timezone=America/Mexico_City \
+--use-rewrites=1
+```
+
 ## Add secure permissions
 At the end of installation
 https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/deployment/file-system-permissions.html?lang=en
@@ -135,13 +151,17 @@ For security, remove write permissions from these directories: '/var/www/html/ap
 
 
 ## Uninstall Two Factor Auth
-For Magento >=2.4.5 
-```shell
-php bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
-```
-For Magento <2.4.5 
+
+### For Magento < 2.4.5
+
 ```shell
 php bin/magento module:disable Magento_TwoFactorAuth
+```
+
+### For Magento >= 2.4.5
+
+```shell
+php bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
 ```
 
 ## Install Sample Data
@@ -155,11 +175,36 @@ php bin/magento setup:upgrade
 
 
 
-## Set in NGINX the docker-ip
-php74mine.local
+## Set in NGINX the docker-ip at vhost.conf
+
+````conf
+upstream php74mine.local { server 172.17.0.2:8060; }
+server {
+  listen 80;
+  server_name php74mine.local;
+  access_log /var/log/nginx/php74mine.local;
+  error_log /var/log/nginx/php74mine.local;
+  location / {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Nginx-Proxy true;
+    proxy_pass http://php74mine.local;
+    proxy_redirect off;
+    proxy_connect_timeout 600;
+    proxy_send_timeout 600;
+    proxy_read_timeout 600;
+    proxy_buffer_size 128k;
+    proxy_buffers 4 256k;
+    proxy_busy_buffers_size 256k;
+  }
+}
+````
+
+
 
 ## Set in /etc/hosts
-php74mine.local
+
+    127.0.0.1 	php74mine.local
 
 ## Test site
 In browser open http://php74mine.local
